@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical"
-    tools:context="br.com.rkj.currency.MainActivity">
+    tools:context=".MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -15,7 +14,7 @@
         android:background="@android:color/holo_blue_dark">
 
         <Spinner
-            android:id="@+id/time_frenquency"
+            android:id="@+id/time_frequency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:prompt="@string/currency_prompt"
@@ -27,8 +26,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
+        android:layout_below="@id/toolbar"
         android:orientation="vertical">
-        
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -60,9 +60,15 @@
                     android:layout_weight="0.49"
                     android:choiceMode="singleChoice"/>
             </LinearLayout>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/line_chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
         </RelativeLayout>
 
-        <android.support.v7.widget.CoordinatorLayout
+        <android.support.design.widget.CoordinatorLayout
             android:id="@+id/log_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -72,18 +78,30 @@
                 android:id="@+id/log_scroll"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/holo_blue_bright"/>
+                android:background="@android:color/holo_blue_bright">
 
-            <TextView
-                android:id="@+id/log_text"
-                android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/log_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"/>
+            </ScrollView>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="20dp"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"/>
-        </android.support.v7.widget.CoordinatorLayout>
+                android:layout_margin="16dp"
+                android:clickable="true"
+                android:src="@drawable/ic_menu"
+                android:backgroundTint="@android:color/holo_blue_dark"
+                app:borderWidth="0dp"
+                android:elevation="6dp"
+                app:layout_anchor="@id/log_scroll"
+                app:layout_anchorGravity="bottom|right|end"/>
 
-
+        </android.support.design.widget.CoordinatorLayout>
     </LinearLayout>
-
 </RelativeLayout>
