@@ -1,7 +1,6 @@
 package br.com.rkj.currency.model;
 
 import android.content.Context;
-import android.database.DatabaseErrorHandler;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -12,9 +11,9 @@ import br.com.rkj.currency.Constante;
 /**
  * Created by kauerodrigues on 4/19/16.
  */
-public class CurrencyAdapter extends SQLiteOpenHelper {
+public class CurrencyDatabaseAdapter extends SQLiteOpenHelper {
 
-    public static final String TAG = CurrencyAdapter.class.getName();
+    public static final String TAG = CurrencyDatabaseAdapter.class.getName();
 
     public static final int DATABASE_VERSION = 1;
 
@@ -25,7 +24,7 @@ public class CurrencyAdapter extends SQLiteOpenHelper {
                                 Constante.TB_RATE + " real," +
                                 Constante.TB_DATE + " date);";
 
-    public CurrencyAdapter(Context context) {
+    public CurrencyDatabaseAdapter(Context context) {
         super(context, Constante.DATABASE_NAME, null, DATABASE_VERSION);
 
     }

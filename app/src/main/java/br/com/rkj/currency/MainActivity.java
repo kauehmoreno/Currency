@@ -2,12 +2,12 @@ package br.com.rkj.currency;
 
 import android.content.Intent;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
@@ -16,10 +16,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -34,7 +32,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import br.com.rkj.currency.model.CurrencyAdapter;
+import br.com.rkj.currency.model.CurrencyDatabaseAdapter;
 import br.com.rkj.currency.model.CurrencyTableHelper;
 import br.com.rkj.currency.object.Currency;
 import br.com.rkj.currency.receiver.CurrencyReceiver;
@@ -80,6 +78,19 @@ public class MainActivity extends AppCompatActivity implements CurrencyReceiver.
         mLogLayout = (CoordinatorLayout) findViewById(R.id.log_layout);
        }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        serviceRepetition = SharedPrefrencesUtils.getServiceRepetition(this);
+        retrieveCurrencyExchangeRate();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    //        LogUtils.setLogListener(null);
+    }
 
     /*
         Metodo que tem o resultado dos dados
@@ -151,8 +162,8 @@ public class MainActivity extends AppCompatActivity implements CurrencyReceiver.
         Metodo para inicial model
      */
     private void iniciaModel(){
-        CurrencyAdapter adapter = new CurrencyAdapter(this);
-        tableHelper = new CurrencyTableHelper(adapter);
+        CurrencyDatabaseAdapter currencyDataBaseAdapter = new CurrencyDatabaseAdapter(this);
+        tableHelper = new CurrencyTableHelper(currencyDataBaseAdapter);
     }
 
     private void initToolbar() {
@@ -193,11 +204,11 @@ public class MainActivity extends AppCompatActivity implements CurrencyReceiver.
         mBaseCurrencyList = (ListView) findViewById(R.id.base_currency_list);
         mTargetCurrencyList = (ListView) findViewById(R.id.target_currency_list);
 
-        CurrencyAdapter baseCurrencyAdapter = new CurrencyAdapter(this);
-        CurrencyAdapter targetCurrencyAdapter = new CurrencyAdapter(this);
+        br.com.rkj.currency.adapters.CurrencyAdapter baseCurrencyAdapter = new br.com.rkj.currency.adapters.CurrencyAdapter(this);
+        br.com.rkj.currency.adapters.CurrencyAdapter targetCurrencyAdapter = new br.com.rkj.currency.adapters.CurrencyAdapter(this);
 
-        mBaseCurrencyList.setAdapter((ListAdapter) baseCurrencyAdapter);
-        mTargetCurrencyList.setAdapter((ListAdapter) targetCurrencyAdapter);
+        mBaseCurrencyList.setAdapter(baseCurrencyAdapter);
+        mTargetCurrencyList.setAdapter(targetCurrencyAdapter);
 
         int baseCurrencyIndex = retrieveIndexOf(baseCurrency);
         int targetCurrencyIndex = retrieveIndexOf(targetCurrency);
