@@ -2,7 +2,6 @@ package br.com.rkj.currency.receiver;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcel;
 import android.os.ResultReceiver;
 
 /**
