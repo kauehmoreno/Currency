@@ -3,6 +3,7 @@ package br.com.rkj.currency.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -14,18 +15,20 @@ import br.com.rkj.currency.object.Currency;
  */
 public class CurrencyTableHelper {
 
-    private CurrencyAdapter adapter;
+    public static final String TAG = CurrencyTableHelper.class.getName();
 
-    public CurrencyTableHelper(CurrencyAdapter adapter) {
+    private CurrencyDatabaseAdapter adapter;
+
+    public CurrencyTableHelper(CurrencyDatabaseAdapter adapter) {
         this.adapter = adapter;
     }
 
     public long insertCurrency(Currency currency){
         ArrayList<Currency> currencies = getCurrencyHistorico(currency.getBase(), currency.getName(), currency.getDate());
-
         if (currencies.size() == 0){
-            ContentValues valoresInicias = new ContentValues();
+            Log.d(TAG, "Não há gravacao no banco");
 
+            ContentValues valoresInicias = new ContentValues();
             valoresInicias.put(Constante.TB_BASE, currency.getBase());
             valoresInicias.put(Constante.TB_DATE, currency.getDate());
             valoresInicias.put(Constante.TB_NAME, currency.getName());
@@ -34,6 +37,9 @@ public class CurrencyTableHelper {
             long id = adapter.getWritableDatabase().insert(Constante.CURRENCY_TABLE, null, valoresInicias);
             adapter.getWritableDatabase().close();
             return id;
+        }else{
+            Log.d(TAG, "Há dados no BD");
+
         }
 
         return currencies.get(0).getId();
@@ -48,7 +54,7 @@ public class CurrencyTableHelper {
                 new String[]{Constante.TAB_ID, Constante.TB_BASE, Constante.TB_DATE,
                         Constante.TB_RATE, Constante.TB_NAME},
                 Constante.TB_BASE + " = '" + base + "' AND " + Constante.TB_NAME + " = " +
-                        "'" + name + "'AND " + Constante.TB_DATE + " = '" + date + "'",
+                        "'" + name + "'     AND " + Constante.TB_DATE + " = '" + date + "'",
                 null, null, null, null);
 
         if(cursor != null){
@@ -106,10 +112,11 @@ public class CurrencyTableHelper {
         Currency currency = new Currency();
 
         currency.setId(cursor.getLong(cursor.getColumnIndex(Constante.TAB_ID)));
+        currency.setBase(cursor.getString(cursor.getColumnIndex(Constante.TB_BASE)));
         currency.setName(cursor.getString(cursor.getColumnIndex(Constante.TB_NAME)));
         currency.setRate(cursor.getDouble(cursor.getColumnIndex(Constante.TB_RATE)));
         currency.setDate(cursor.getString(cursor.getColumnIndex(Constante.TB_DATE)));
-        currency.setBase(cursor.getString(cursor.getColumnIndex(Constante.TB_BASE)));
+
 
         return currency;
     }
