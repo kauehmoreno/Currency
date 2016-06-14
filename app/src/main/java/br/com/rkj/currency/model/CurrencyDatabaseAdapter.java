@@ -17,11 +17,11 @@ public class CurrencyDatabaseAdapter extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
 
-    public static final String CURRENCY_TABLE_CREATE = "create table" + Constante.CURRENCY_TABLE + " (" +
-                                Constante.TAB_ID + " integer primary key autoincrement,"+
-                                Constante.TB_BASE + " text not null," +
-                                Constante.TB_NAME + " text not null," +
-                                Constante.TB_RATE + " real," +
+    public static final String CURRENCY_TABLE_CREATE = "create table " + Constante.CURRENCY_TABLE + " (" +
+                                Constante.TAB_ID + " integer primary key autoincrement, "+
+                                Constante.TB_BASE + " text not null, " +
+                                Constante.TB_NAME + " text not null, " +
+                                Constante.TB_RATE + " real, " +
                                 Constante.TB_DATE + " date);";
 
     public CurrencyDatabaseAdapter(Context context) {
@@ -31,19 +31,18 @@ public class CurrencyDatabaseAdapter extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+//        db = getWritableDatabase();
         try{
             db.execSQL(CURRENCY_TABLE_CREATE);
             Log.d(TAG, "Tabela criada");
         } catch(SQLException e){
-            e.printStackTrace();
-            Log.d(TAG, "erro ao criar a tabela");
+            Log.d(TAG, "erro ao criar a tabela -->" + e);
         }
     }
 
     // metodo responsavel por atualizsar a tabela ja criada em caso de modificacao da mesma numa futura versao
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
         clearCurrentTable(db);
         onCreate(db);
     }
